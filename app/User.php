@@ -15,6 +15,7 @@ class User extends Authenticatable
     const USER_ADMIN    = 'true';
     const USER_REGULAR  = 'false';
 
+    protected $table = 'users';
 
 
     /**
@@ -55,7 +56,7 @@ class User extends Authenticatable
         return $this -> admin == User::USER_ADMIN;
     }
 
-    public function generarVerificationToken()
+    public static function generarVerificationToken()
     {
         return str_random(50);
     }
