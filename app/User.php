@@ -32,6 +32,24 @@ class User extends Authenticatable
         'admin',
     ];
 
+    /*Clasicos getters y setters pero solo para los que necesitan tratamiento especieal. Por ejemplo, los usuariosy em mail  los guardaremos siempre en 
+    minúsucula en la bbdd pero a la hora de mostrarlos cuando los recuperamos les 
+    pondremos, solo al nombre, la primera en mayúscula*/
+    public function setNameAttribute($name)
+    {
+        $this -> attributes['name'] = strtolower($name);
+    }
+
+    public function getNameAttribute($name)
+    {
+        return ucwords($name);
+    }
+
+    public function setEmailAttribute($email)
+    {
+        $this -> attributes['email'] = strtolower($email);
+    }
+
     /**
      * The attributes that should be hidden for arrays in responses.
      *
@@ -42,7 +60,6 @@ class User extends Authenticatable
         'remember_token',
         'verification_token',
     ];
-
 
 
 

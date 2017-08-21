@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\seller;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use App\Seller;
 
-class sellerController extends Controller
+use Illuminate\Http\Request;
+use App\Http\Controllers\apiController;
+
+class sellerController extends apiController
 {
     /**
      * Display a listing of the resource.
@@ -14,28 +16,9 @@ class sellerController extends Controller
      */
     public function index()
     {
-        //
-    }
+        $sellers = Seller::has('products')->get();
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+        return $this -> showAll($sellers);
     }
 
     /**
@@ -46,40 +29,9 @@ class sellerController extends Controller
      */
     public function show($id)
     {
-        //
-    }
+        //Busca al user que tenga products(condicion de seller) y que tenga el id $id
+        $seller = Seller::has('products')->findOrFail($id);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return $this -> showOne($seller);
     }
 }

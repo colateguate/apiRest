@@ -5,9 +5,9 @@ namespace App\Http\Controllers\user;
 use App\User;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\apiController;
 
-class userController extends Controller
+class userController extends apiController
 {
     /**
      * Display a listing of the resource.
@@ -18,11 +18,11 @@ class userController extends Controller
     {
         $usuarios = User::all();
 
-        return response()->json(['data' => $usuarios], 200);
+        return $this -> showAll($usuarios);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Crea un usuario
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -51,11 +51,11 @@ class userController extends Controller
         $usuario = User::create($campos);
 
         //status 201: Se ha almacenado OK
-        return response()->json(['data' => $usuario], 201);
+        return $this -> showOne($usuario, 201);
     }
 
     /**
-     * Display the specified resource.
+     * retorna un usuario
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -64,11 +64,11 @@ class userController extends Controller
     {
         $usuario = User::findOrFail($id);
 
-        return response()->json(['data' => $usuario], 200);
+        return $this -> showOne($usuario);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Actualiza un usuario.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -114,7 +114,7 @@ class userController extends Controller
             if(!$userParaActualizar->esVerificado())
             {
                 //codigo 409: conflicto con la peticion recibida
-                return response() -> json(['error' => 'Unicamente los usuarios verificados pueden cambiar su valor de administrador', 'code' => 409], 409);
+                return $this -> errorResponse('Unicamente los usuarios verificados pueden cambiar su valor de administrador', 409);
             }
 
             $userParaActualizar -> admin = $request -> admin;
@@ -124,13 +124,13 @@ class userController extends Controller
         if(!$userParaActualizar -> isDirty())
         {
             //codigo 422: Peticion mal formada
-            return response()->json(['error' => 'Se debe especificar almenos un valor distinto para actualizar', 'code' => 422], 422);
+            return $this -> errorResponse('Se debe especificar almenos un valor distinto para actualizar', 422);
         }
 
 
         $userParaActualizar -> save();
 
-        return response()->json(['data' => $userParaActualizar], 200);
+        return $this -> showOne($userParaActualizar);
     }
 
     /**
@@ -141,6 +141,9 @@ class userController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $userToDestroy = User::findOrFail($id);
+        $userToDestroy -> delete();
+
+        return $this -> showOne($userToDestroy);
     }
 }

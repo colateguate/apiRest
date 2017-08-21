@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 */
 
 /*
-resourde hace referencia a un controlador de recurso
+resource hace referencia a un controlador de recurso
 param1: ruta a chequear
 param2: path al controlador
 param3: condiciones
